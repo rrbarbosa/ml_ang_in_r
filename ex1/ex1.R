@@ -133,16 +133,23 @@ persp(theta0_vals, theta1_vals, J_vals,
 
 
 ## Contour plot
-# TODO: needs some work with data frame creation and melt function. There's gotta be a better way...
-
-df = data.frame(theta0_vals, theta1_vals);
-df$J_vals = J_vals;
-melted = melt(df$J_vals); # not very sure what this does yet
-ax = expand.grid(theta0_vals, theta1_vals);
-melted$x = ax[,1];
-melted$y = ax[,2];
-names(melted) <- c("a", "b", "z", "x", "y")
+ax <- expand.grid(theta0_vals, theta1_vals);
+z <- as.vector(J_vals);
+melted <- data.frame(x = ax[,1], y = ax[,2], z = t(z));
 plt <- ggplot(melted, aes(x, y, z = log(z)));
-##plt <- plt + geom_tile(aes(fill=Jval));# + scale_fill_gradientn(colours=matlab.like(10));
 plt <- plt + stat_contour(aes(colour = ..level..));
 print(plt);
+
+# TODO: this works but I don't know why (and it seems faster..)
+#df = data.frame(theta0_vals, theta1_vals);
+#df$J_vals = J_vals;
+#melted = melt(df$J_vals); # not very sure what this does yet
+#ax = expand.grid(theta0_vals, theta1_vals);
+#melted$x = ax[,1];
+#melted$y = ax[,2];
+#names(melted) <- c("a", "b", "z", "x", "y")
+#plt <- ggplot(melted, aes(x, y, z = log(z)));
+###plt <- plt + geom_tile(aes(fill=Jval));# + scale_fill_gradientn(colours=matlab.like(10));
+#plt <- plt + stat_contour(aes(colour = ..level..));
+#print(plt);
+
